@@ -138,9 +138,10 @@ class Usuario extends MX_Controller {
 				'password' => sha1($this->input->post(pass)),
 				'slug' => createSlug($this->input->post('name'))
 			);
-
+			$data = $this->upload->data();
+			die_pre($data);
 			if($image)
-				$usuario['image'] = $this->upload->data('file_name');
+				$usuario['image'] = $data['file_name'];
 
 			$this->usuario_model->insertarUsuario($usuario);
 
@@ -168,7 +169,93 @@ class Usuario extends MX_Controller {
 		$datos['titulo'] = 'Backend - Nuevo Usuarios';
 		$datos['usuario'] = $this->obtenerUsuario(array('id' => $this->session->userdata('usuario_id')));
 		$datos['usuarios'] = $this->obtenerUsuarios();
-		$this->load->view('mostrar-usuarios', $datos);
+		$datos['contenido_principal'] = $this->load->view('mostrar-usuarios', $datos, true);
+		$this->load->view('back/template', $datos);
+	}
+
+	function existeUsuario($slug)
+	{
+		return $this->usuario_model->existeUsuario($slug);
+	}
+
+	public function actualizarUsuario($slug)
+	{
+		if(modules::run('usuario/haySesion') && $this->existeUsuario($slug))
+		{
+			$datos['titulo'] = 'Backend - Actualizar usuario';
+			$datos['usuario'] = $this->obtenerUsuario(array('slug' => $slug));
+			$datos['contenido_principal'] = $this->load->view('actualizar-usuario', $datos, true);
+			$this->load->view('back/template', $datos);
+		}
+		else
+		{
+			echo "No existe";
+		}
+	}
+
+	function existeEmail()
+	{
+		return !$this->noExisteEmail($this->input->post('email'));
+	}
+
+	public function usuarioActualizado()
+	{
+		$this->form_validation->set_rules('name', 'Nombre', 'required|trim');
+		$this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_existeEmail');
+
+		if(!empty($this->input->post('pass')) || !empty($this->input->post('repass')))
+		{
+			$this->form_validation->set_rules('pass', 'Contraseña', 'required');
+			$this->form_validation->set_rules('repass','Repita contraseña', 'required|matches[pass]');
+			$this->form_validation->set_message('matches', 'Las contraseñas no coinciden.');
+		}
+
+		$this->form_validation->set_message('required', '%s es requerido.');
+		$this->form_validation->set_message('is_unique', '%s existe.');
+		
+
+		$this->form_validation->set_error_delimiters('<div class="card-panel red black-2 white-text center-align"><i class="mdi-alert-error"></i>','</div>');
+
+		//UPLOAD IMAGE
+		$config['upload_path'] = 'assets/back/upload/avatar/';
+		$config['allowed_types'] = 'gif|jpg|png';
+		$config['max_size']	= '100';
+		$config['max_width'] = '1024';
+		$config['max_height'] = '768';
+
+		$this->load->library('upload', $config);
+
+		if($this->form_validation->run($this))
+		{
+			$usuario_id = $this->input->post('usuario_id');
+			$usuario = array(
+				'name' => $this->input->post('name'),
+				'email' => $this->input->post('email'),
+				'slug' => createSlug($this->input->post('name'))
+			);
+			if(!empty($this->input->post('pass')) || !empty($this->input->post('repass')))
+			{
+				$usuario['password'] = sha1($this->input->post('pass'));
+			}
+
+			if($this->upload->do_upload('pic'))
+			{
+				$data = $this->upload->data();
+				$usuario['image'] = $data['file_name'];
+			}
+
+			$this->usuario_model->actualizarUsuario($usuario_id, $usuario);
+
+			redirect('usuario/verUsuarios');
+		}
+		else
+		{
+			$datos['image'] = $this->upload->display_errors('<div class="card-panel red black-2 white-text center-align"><i class="mdi-alert-error"></i>', '</div>');
+			$datos['titulo'] = 'Backend - Actualizar usuario';
+			$datos['usuario'] = $this->obtenerUsuario(array('id' => $this->input->post('usuario_id')));
+			$datos['contenido_principal'] = $this->load->view('actualizar-usuario', $datos, true);
+			$this->load->view('back/template', $datos);
+		}
 	}
 }
 

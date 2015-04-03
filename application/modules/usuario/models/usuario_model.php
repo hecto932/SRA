@@ -32,8 +32,22 @@ class Usuario_model extends CI_Model
 
 	function obtenerUsuarios()
 	{
+		$this->db->where('id !=',1);
 		$query = $this->db->get('usuario');
 		return $query->result();
+	}
+
+	//VERIFICA SI EXISTE ESE USUARIO
+	function existeUsuario($slug)
+	{
+		$query = $this->db->get_where('usuario', array('slug' => $slug));
+		return $query->num_rows() != 0;
+	}
+
+	function actualizarUsuario($usuario_id, $usuario)
+	{
+		$this->db->where('id', $usuario_id);
+		$this->db->update('usuario', $usuario); 
 	}
 }
 
