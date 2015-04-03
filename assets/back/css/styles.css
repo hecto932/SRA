@@ -4,3 +4,10 @@
 	padding: 0.5em;
 	font-weight: thin;
 }
+@media (min-width: 993px) {
+
+	.logo-sra
+	{
+		margin: 0em 1em;
+	}
+}
