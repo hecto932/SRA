@@ -33,6 +33,7 @@ class Usuario_model extends CI_Model
 	function obtenerUsuarios()
 	{
 		$this->db->where('id !=',1);
+		$this->db->where('id !=', $this->session->userdata('usuario_id'));
 		$query = $this->db->get('usuario');
 		return $query->result();
 	}
@@ -48,6 +49,11 @@ class Usuario_model extends CI_Model
 	{
 		$this->db->where('id', $usuario_id);
 		$this->db->update('usuario', $usuario); 
+	}
+
+	function usuarioEliminado($slug)
+	{
+		$this->db->delete('usuario', array('slug' => $slug));
 	}
 }
 

@@ -17,7 +17,7 @@
     	<header>
     		<nav>	
 			    <div class="nav-wrapper blue darken-1 z-depth-1">
-			      <a href="back_home.html" class="brand-logo logo-sra">SRA</a>
+			      <a href="backend" class="brand-logo logo-sra">SRA</a>
 			      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 			      <ul class="right hide-on-med-and-down">
 			        <li><a href="backend">Inicio</a></li>

@@ -24,13 +24,13 @@
 					          	<td><?php echo $value['id']; ?></td>
 					            <td><?php echo $value['name']; ?></td>
 					            <td><?php echo $value['email']; ?></td>
-					            <td><a href="usuario/actualizarUsuario/<?php echo $value['slug']; ?>"><i class="mdi-editor-border-color	"></i></a> <a href="#"><i class="mdi-action-delete"></i></a></td>
+					            <td><a href="usuario/actualizarUsuario/<?php echo $value['slug']; ?>"><i class="mdi-editor-border-color	"></i></a> <a href="usuario/eliminarUsuario/<?php echo $value['slug']; ?>"><i class="mdi-action-delete"></i></a></td>
 					          </tr>
 				          <?php endforeach; ?>
 				        </tbody>
 				    </table>
 				</div>
-			
+				<a href="reporte/generar"class="waves-effect waves-light btn">Stuff</a>
 		<?php else: ?>
 			<form>
 			 <input type="text" name="buscar" placeholder="Buscar">

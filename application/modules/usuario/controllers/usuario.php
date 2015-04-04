@@ -135,11 +135,10 @@ class Usuario extends MX_Controller {
 			$usuario = array(
 				'name' => $this->input->post('name'),
 				'email' => $this->input->post('email'),
-				'password' => sha1($this->input->post(pass)),
+				'password' => sha1($this->input->post(password)),
 				'slug' => createSlug($this->input->post('name'))
 			);
 			$data = $this->upload->data();
-			die_pre($data);
 			if($image)
 				$usuario['image'] = $data['file_name'];
 
@@ -166,11 +165,18 @@ class Usuario extends MX_Controller {
 
 	public function verUsuarios()
 	{
-		$datos['titulo'] = 'Backend - Nuevo Usuarios';
-		$datos['usuario'] = $this->obtenerUsuario(array('id' => $this->session->userdata('usuario_id')));
-		$datos['usuarios'] = $this->obtenerUsuarios();
-		$datos['contenido_principal'] = $this->load->view('mostrar-usuarios', $datos, true);
-		$this->load->view('back/template', $datos);
+		if($this->haySesion())
+		{
+			$datos['titulo'] = 'Backend - Nuevo Usuarios';
+			$datos['usuario'] = $this->obtenerUsuario(array('id' => $this->session->userdata('usuario_id')));
+			$datos['usuarios'] = $this->obtenerUsuarios();
+			$datos['contenido_principal'] = $this->load->view('mostrar-usuarios', $datos, true);
+			$this->load->view('back/template', $datos);
+		}
+		else
+		{
+			redirect('backend');	
+		}
 	}
 
 	function existeUsuario($slug)
@@ -255,6 +261,34 @@ class Usuario extends MX_Controller {
 			$datos['usuario'] = $this->obtenerUsuario(array('id' => $this->input->post('usuario_id')));
 			$datos['contenido_principal'] = $this->load->view('actualizar-usuario', $datos, true);
 			$this->load->view('back/template', $datos);
+		}
+	}
+
+	public function eliminarUsuario($slug)
+	{
+		if($this->haySesion() && $this->existeUsuario($slug))
+		{
+			$datos['titulo'] = 'Backend - Eliminar usuario';
+			$datos['usuario'] = $this->obtenerUsuario(array('slug' => $slug));
+			$datos['contenido_principal'] = $this->load->view('eliminar-usuario', $datos, true);
+			$this->load->view('back/template', $datos);
+		}
+		else
+		{
+			redirect('backend/verUsuarios');
+		}
+	}
+
+	public function usuarioEliminado($slug)
+	{
+		if($this->haySesion() && $this->existeUsuario($slug))
+		{
+			$this->usuario_model->usuarioEliminado($slug);
+			redirect('usuario/verUsuarios');
+		}
+		else
+		{
+			redirect('usuarios/verUsuarios');
 		}
 	}
 }
