@@ -27,9 +27,9 @@
 			        	</a>
 			        	<!-- Dropdown Structure -->
 						<ul id="empleados" class="dropdown-content">
-						  <li><a class="blue-text text-blue" href="#!">Nuevo</a></li>
+						  <li><a class="blue-text text-blue" href="empleado/nuevoEmpleado">Nuevo</a></li>
 						  <li class="divider"></li>
-						  <li><a class="blue-text text-blue" href="usuario/logOut">Ver todos</a></li>
+						  <li><a class="blue-text text-blue" href="empleado/verEmpleados">Ver todos</a></li>
 						</ul>
 			        </li>
 			        <li><a href="#">Reportes</a></li>
@@ -64,8 +64,8 @@
 						      	<a class="collapsible-header bold blue-text text-blue">Empleados</a>
 						      	<div class="collapsible-body">
 						      		<ul>
-				                  		<li><a href="#">Nuevo</a></li>
-				                  		<li><a href="usuario/logOut">Ver todos</a></li>
+				                  		<li><a href="empleado/nuevoEmpleado">Nuevo</a></li>
+				                  		<li><a href="empleado/verEmpleados">Ver todos</a></li>
 				                	</ul>
 						      	</div>
 						   	</li>
