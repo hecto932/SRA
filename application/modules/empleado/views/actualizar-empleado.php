@@ -2,17 +2,17 @@
   		 	<div class="row">
         		<div class="col s12 m12 l12 ">
         			<div class="card">
-        				<h3 class="center-align login-title white-text text-white deep-orange">Nuevo Empleado</h3>
-        				<form id="form_nuevoEmpleado" class="col s12" action="empleado/empleadoNuevo" method="POST" enctype="multipart/form-data">
-        					
+        				<h3 class="center-align login-title white-text text-white deep-orange">Actualizar empleado</h3>
+        				<form id="form_nuevoEmpleado" class="col s12" action="empleado/empleadoActualizado" method="POST" enctype="multipart/form-data">
+        					<input type="hidden" name="empleado_id" value="<?php echo $empleado['id']; ?>"> 
         					<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 					      <div class="row">
 					        <div class="input-field col s6">
-					          <input id="first_name" type="text" class="validate" name="name" value="<?php echo set_value('name'); ?>">
+					          <input id="first_name" type="text" class="validate" name="name" value="<?php echo set_value('name', $empleado['name']); ?>">
 					          <label for="first_name">Nombre</label>
 					        </div>
 					        <div class="input-field col s6">
-					          <input id="cedula_empleado" type="number" class="validate" name="cedula" value="<?php echo set_value('cedula'); ?>">
+					          <input id="cedula_empleado" type="number" class="validate" name="cedula" value="<?php echo set_value('cedula', $empleado['cedula']); ?>">
 					          <label for="first_name">Cedula</label>
 					        </div>
 					      </div>

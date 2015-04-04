@@ -50,4 +50,22 @@ $(document).ready(function(){
         });
 	});
 
+	//AJAX
+	$('#cedula_empleado').focusout(function(event) {
+		var url = 'empleado/ajax_noExisteCedula';
+		$.ajax({
+            url:        url,
+            type:       'POST',
+            dataType:   'json',
+            data: $('#form_nuevoEmpleado').serialize(),
+            success: function(json)
+            {
+            	if(json.cedula)
+            		$('#cedula_empleado').removeClass('invalid').addClass('valid').attr('title', 'Cedula valida.');
+            	else
+            		$('#cedula_empleado').removeClass('valid').addClass('invalid').attr('title', 'Cedula invalida.');
+            }
+        });
+	});
+
 });

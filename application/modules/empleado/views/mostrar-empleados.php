@@ -48,7 +48,7 @@
 
 		        <tbody>
 		          <tr>
-		          	<td>No hay usuarios registrados!</td>
+		          	<td>No hay empleados registrados!</td>
 		          </tr>
 		        </tbody>
 		    </table>

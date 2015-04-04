@@ -288,7 +288,7 @@ class Usuario extends MX_Controller {
 		}
 		else
 		{
-			redirect('usuarios/verUsuarios');
+			redirect('backend');
 		}
 	}
 }
