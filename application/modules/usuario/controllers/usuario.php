@@ -109,19 +109,28 @@ class Usuario extends MX_Controller {
 
 	public function usuarioNuevo()
 	{
+		//die_pre($_POST);
+
+		//DEFINICION DE LAS REGLAS
+		//$this->form_validation->set_rules('nombreInput','Alias','regla1|regla2|regla3');
 
 		$this->form_validation->set_rules('name', 'Nombre', 'required|trim');
 		$this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_noExisteEmail');
 		$this->form_validation->set_rules('pass', 'Contraseña', 'required');
 		$this->form_validation->set_rules('repass','Repita contraseña', 'required|matches[pass]');
 
+		//DEFINICION DE MENSAJES
 		$this->form_validation->set_message('required', '%s es requerido.');
 		$this->form_validation->set_message('noExisteEmail', '%s existe.');
 		$this->form_validation->set_message('matches', 'Las contraseñas no coinciden.');
 
-		$this->form_validation->set_error_delimiters('<div class="card-panel red black-2 white-text center-align"><i class="mdi-alert-error"></i>','</div>');
+		//ESTILOS DE LOS ERRORES(OPCIONAL)
+		//$this->form_validation->set_error_delimiters('<div class="card-panel red black-2 white-text center-align"><i class="mdi-alert-error"></i>','</div>');
+		$this->form_validation->set_error_delimiters('<p style="color: peru;">', '</p>');
 
 		//UPLOAD IMAGE
+
+		/*
 		$config['upload_path'] = 'assets/back/upload/avatar/';
 		$config['allowed_types'] = 'gif|jpg|png';
 		$config['max_size']	= '100';
@@ -130,25 +139,27 @@ class Usuario extends MX_Controller {
 
 		$this->load->library('upload', $config);
 		$image = $this->upload->do_upload('pic');
-		if($this->form_validation->run($this))
+		*/
+
+		//EJECUTAMOS LAS VALIDACIONES
+		if($this->form_validation->run($this)) //PASO LAS VALIDACIONES
 		{
 			$usuario = array(
 				'name' => $this->input->post('name'),
 				'email' => $this->input->post('email'),
-				'password' => sha1($this->input->post(password)),
-				'slug' => createSlug($this->input->post('name'))
+				'password' => sha1($this->input->post('pass')),
+				'createSlug' => createSlug($this->input->post('name')),
+				'create_at' => date('Y-m-d')
 			);
-			$data = $this->upload->data();
-			if($image)
-				$usuario['image'] = $data['file_name'];
-
+			
 			$this->usuario_model->insertarUsuario($usuario);
 
 			redirect('backend');
 		}
 		else
 		{
-			$datos['image'] = $this->upload->display_errors('<div class="card-panel red black-2 white-text center-align"><i class="mdi-alert-error"></i>', '</div>');
+
+			
 			$datos['titulo'] = 'Backend - Nuevo Usuarios';
 			$datos['usuario'] = $this->obtenerUsuario(array('id' => $this->session->userdata('usuario_id')));
 			//die_pre($datos);
@@ -290,6 +301,51 @@ class Usuario extends MX_Controller {
 		{
 			redirect('backend');
 		}
+	}
+
+	public function ajax_allUser()
+	{
+		header('Content-type: application/json');
+		$query = $this->usuario_model->getAllUser();
+		$query = objectSQL_to_array($query);
+		echo json_encode($query);
+	}
+
+	public function allUser()
+	{
+		$query = $this->usuario_model->getAllUser();
+		$query = objectSQL_to_array($query);
+		return $query;
+	}
+
+
+	public function autocomplete()
+	{
+		$data['titulo'] = 'Autocompletado';
+		$this->load->view('autocompletado-usuarios', $data);
+	}
+
+	public function ajax_likeUsers()
+	{
+		$usuario = $this->input->post('usuario');
+		header('Content-type: application/json');
+		$query = $this->usuario_model->ajax_likeUsers($usuario);
+		$query = objectSQL_to_array($query);
+		echo json_encode($query);
+	}
+
+	public function pdf()
+	{
+	    $this->load->library('fpdf_gen');
+		
+		$this->load->library('fpdf_gen');
+		
+		$this->fpdf->SetFont('Arial','B',16);
+		$data['texto'] = "Hola mundo!";
+		$html = $this->load->view('pdf', $data, true);
+		$this->fpdf->WriteHTML( $this->load->view('pdf', '', true));
+		echo $this->fpdf->Output('hello_world.pdf','I');
+		
 	}
 }
 

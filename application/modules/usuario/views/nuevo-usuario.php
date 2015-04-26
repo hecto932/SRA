@@ -109,10 +109,12 @@
 					        <div class="input-field col s6">
 					          <input id="first_name" type="text" class="validate" name="name" value="<?php echo set_value('name'); ?>">
 					          <label for="first_name">Nombre</label>
+					          <?php echo form_error('name'); ?>
 					        </div>
 					        <div class="input-field col s6">
 					          <input id="email" type="text" name="email" value="<?php echo set_value('email'); ?>">
 					          <label for="email">Email</label>
+					          <?php echo form_error('email'); ?>
 					        </div>
 					      </div>
 					      <div class="row">
@@ -125,6 +127,7 @@
 					        <div class="input-field col s12">
 					          <input id="password" type="password" name="repass" class="validate">
 					          <label for="password">Repita la contraseña</label>
+
 					        </div>
 					      </div>
 					      <div class="row">

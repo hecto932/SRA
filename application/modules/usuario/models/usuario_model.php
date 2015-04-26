@@ -55,6 +55,19 @@ class Usuario_model extends CI_Model
 	{
 		$this->db->delete('usuario', array('slug' => $slug));
 	}
+
+	function getAllUser()
+	{
+		$query = $this->db->get('usuario');
+		return $query->result();
+	}
+
+	function ajax_likeUsers($name)
+	{
+		$this->db->like('name', $name); 
+		$query = $this->db->get('usuario');
+		return $query->result();
+	}
 }
 
 ?>

@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database', 'session','form_validation', 'encrypt
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('misc_helper','url');
+$autoload['helper'] = array('misc_helper','url','file');
 
 
 /*
